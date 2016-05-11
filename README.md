@@ -18,5 +18,8 @@ for (int j = 0; j < 10; j++) {
 
 You can run this java benchmarking using these commands:
 
+<code>
 mvn clean install
+
 java -jar target/benchmarks.jar
+</code>
