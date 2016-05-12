@@ -8,20 +8,20 @@ import org.openjdk.jmh.runner.options.OptionsBuilder;
 
 import java.util.concurrent.TimeUnit;
 
+@Fork(value = CleanStringBuilderBenchmark.FORKS, warmups = CleanStringBuilderBenchmark.FORKS, jvmArgsAppend = {"-XX:+UseParallelGC", "-Xms1g", "-Xmx1g"})
+@Warmup(batchSize = CleanStringBuilderBenchmark.BATCH_SIZE, iterations = CleanStringBuilderBenchmark.ITER_NUM)
+@Measurement(batchSize = CleanStringBuilderBenchmark.BATCH_SIZE, iterations = CleanStringBuilderBenchmark.ITER_NUM)
+@BenchmarkMode(Mode.AverageTime)
+@OutputTimeUnit(TimeUnit.NANOSECONDS)
 public class CleanStringBuilderBenchmark {
 
     public static final String ABCD = "abcd";
     public static final int BATCH_SIZE = 100000;
     public static final int ITER_NUM = 5;
-    public static final int FORKS = 2;
+    public static final int FORKS = 1;
 
     @Benchmark
-    @Fork(value = FORKS, warmups = FORKS)
-    @Warmup(batchSize = BATCH_SIZE, iterations = ITER_NUM)
-    @Measurement(batchSize = BATCH_SIZE, iterations = ITER_NUM)
-    @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.NANOSECONDS)
-    public void setLengthZeroTrim() {
+    public StringBuilder setLengthZeroTrim() {
         StringBuilder sb = new StringBuilder();
         for (int j = 0; j < 10; j++) {
             for (int i = 0; i < 10; i++) {
@@ -30,15 +30,11 @@ public class CleanStringBuilderBenchmark {
             sb.setLength(0);
             sb.trimToSize();
         }
+        return sb;
     }
 
     @Benchmark
-    @Fork(value = FORKS, warmups = FORKS)
-    @Warmup(batchSize = BATCH_SIZE, iterations = ITER_NUM)
-    @Measurement(batchSize = BATCH_SIZE, iterations = ITER_NUM)
-    @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.NANOSECONDS)
-    public void setLengthZeroNoTrim() {
+    public StringBuilder setLengthZeroNoTrim() {
         StringBuilder sb = new StringBuilder();
         for (int j = 0; j < 10; j++) {
             for (int i = 0; i < 10; i++) {
@@ -46,16 +42,12 @@ public class CleanStringBuilderBenchmark {
             }
             sb.setLength(0);
         }
+        return sb;
     }
 
 
     @Benchmark
-    @Fork(value = FORKS, warmups = FORKS)
-    @Warmup(batchSize = BATCH_SIZE, iterations = ITER_NUM)
-    @Measurement(batchSize = BATCH_SIZE, iterations = ITER_NUM)
-    @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.NANOSECONDS)
-    public void deleteContent() {
+    public StringBuilder deleteContent() {
         StringBuilder sb = new StringBuilder();
         for (int j = 0; j < 10; j++) {
             for (int i = 0; i < 10; i++) {
@@ -63,15 +55,11 @@ public class CleanStringBuilderBenchmark {
             }
             sb.delete(0, sb.length());
         }
+        return sb;
     }
 
     @Benchmark
-    @Fork(value = FORKS, warmups = FORKS)
-    @Warmup(batchSize = BATCH_SIZE, iterations = ITER_NUM)
-    @Measurement(batchSize = BATCH_SIZE, iterations = ITER_NUM)
-    @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.NANOSECONDS)
-    public void newStringBuilder() {
+    public StringBuilder newStringBuilder() {
         StringBuilder sb = new StringBuilder();
         for (int j = 0; j < 10; j++) {
             for (int i = 0; i < 10; i++) {
@@ -79,6 +67,7 @@ public class CleanStringBuilderBenchmark {
             }
             sb = new StringBuilder();
         }
+        return sb;
     }
 
 
