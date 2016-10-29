@@ -30,11 +30,16 @@ java -jar target/benchmarks.jar
 Latest figures from the default configuration of benchmark:
 
 <pre><code>
-Benchmark                                        Mode  Cnt          Score
-  Error  Units
-CleanStringBuilderBenchmark.deleteContent        avgt   10   70472903.843 ± 3035393.739  ns/op
-CleanStringBuilderBenchmark.newStringBuilder     avgt   10  107803873.642 ± 8149905.291  ns/op
-CleanStringBuilderBenchmark.setLengthZeroNoTrim  avgt   10   66664449.640 ±   35151.001  ns/op
-CleanStringBuilderBenchmark.setLengthZeroTrim    avgt   10  125014260.113 ±   59993.479  ns/op
+
+Benchmark                                        Mode  Cnt     Score     Error  Units
+CleanStringBuilderBenchmark.deleteContent        avgt    5  1253.093 ± 173.797  ns/op
+CleanStringBuilderBenchmark.newStringBuilder     avgt    5  1535.043 ±  23.399  ns/op
+CleanStringBuilderBenchmark.setLengthZeroNoTrim  avgt    5  1176.839 ±  23.794  ns/op
+CleanStringBuilderBenchmark.setLengthZeroTrim    avgt    5  1795.839 ± 164.180  ns/op
+
+As we can see setLengthZeroNoTrim is 1.3 times faster than newStringBuilder approach.
+
+Possible JEP was discussed with Alexey Shipilev and agreed to be subjective to actually introducing to JDK.
+
 
 </code></pre>

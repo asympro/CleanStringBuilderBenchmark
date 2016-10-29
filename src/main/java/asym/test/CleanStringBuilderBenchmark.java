@@ -1,6 +1,7 @@
 package asym.test;
 
 import org.openjdk.jmh.annotations.*;
+import org.openjdk.jmh.infra.Blackhole;
 import org.openjdk.jmh.runner.Runner;
 import org.openjdk.jmh.runner.RunnerException;
 import org.openjdk.jmh.runner.options.Options;
@@ -8,25 +9,23 @@ import org.openjdk.jmh.runner.options.OptionsBuilder;
 
 import java.util.concurrent.TimeUnit;
 
-@Fork(value = CleanStringBuilderBenchmark.FORKS, warmups = CleanStringBuilderBenchmark.FORKS, jvmArgsAppend = {"-XX:+UseParallelGC", "-Xms1g", "-Xmx1g"})
-@Warmup(batchSize = CleanStringBuilderBenchmark.BATCH_SIZE, iterations = CleanStringBuilderBenchmark.ITER_NUM)
-@Measurement(batchSize = CleanStringBuilderBenchmark.BATCH_SIZE, iterations = CleanStringBuilderBenchmark.ITER_NUM)
+@Fork(value = 1, jvmArgsAppend = {"-XX:+UseParallelGC", "-Xms1g", "-Xmx1g"})
+@Warmup(iterations = 5)
+@Measurement(iterations = 5)
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 public class CleanStringBuilderBenchmark {
 
     public static final String ABCD = "abcd";
-    public static final int BATCH_SIZE = 100000;
-    public static final int ITER_NUM = 5;
-    public static final int FORKS = 1;
 
     @Benchmark
-    public StringBuilder setLengthZeroTrim() {
+    public StringBuilder setLengthZeroTrim(Blackhole bh) {
         StringBuilder sb = new StringBuilder();
         for (int j = 0; j < 10; j++) {
             for (int i = 0; i < 10; i++) {
                 sb.append(ABCD);
             }
+            bh.consume(sb);
             sb.setLength(0);
             sb.trimToSize();
         }
@@ -34,37 +33,39 @@ public class CleanStringBuilderBenchmark {
     }
 
     @Benchmark
-    public StringBuilder setLengthZeroNoTrim() {
+    public StringBuilder setLengthZeroNoTrim(Blackhole bh) {
         StringBuilder sb = new StringBuilder();
         for (int j = 0; j < 10; j++) {
             for (int i = 0; i < 10; i++) {
                 sb.append(ABCD);
             }
+            bh.consume(sb);
             sb.setLength(0);
         }
         return sb;
     }
 
-
     @Benchmark
-    public StringBuilder deleteContent() {
+    public StringBuilder deleteContent(Blackhole bh) {
         StringBuilder sb = new StringBuilder();
         for (int j = 0; j < 10; j++) {
             for (int i = 0; i < 10; i++) {
                 sb.append(ABCD);
             }
+            bh.consume(sb);
             sb.delete(0, sb.length());
         }
         return sb;
     }
 
     @Benchmark
-    public StringBuilder newStringBuilder() {
+    public StringBuilder newStringBuilder(Blackhole bh) {
         StringBuilder sb = new StringBuilder();
         for (int j = 0; j < 10; j++) {
             for (int i = 0; i < 10; i++) {
                 sb.append(ABCD);
             }
+            bh.consume(sb);
             sb = new StringBuilder();
         }
         return sb;
